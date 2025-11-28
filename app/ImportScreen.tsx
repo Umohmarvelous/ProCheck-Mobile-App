@@ -1,8 +1,8 @@
+import { useRouter } from 'expo-router';
 import React, { useState } from 'react';
-import { View, Text, TextInput, TouchableOpacity, StyleSheet, Alert } from 'react-native';
+import { Alert, StyleSheet, Text, TextInput, TouchableOpacity, View } from 'react-native';
 import { useDispatch } from 'react-redux';
 import { importTextAsList } from '../src/store/slices/workspaceSlice';
-import { useRouter } from 'expo-router';
 
 export default function ImportScreen() {
   const [name, setName] = useState('Imported Note');

@@ -1,6 +1,6 @@
 import { useRouter } from 'expo-router';
 import React, { useMemo, useState } from 'react';
-import { Alert, FlatList, ScrollView, StyleSheet, Text, TextInput, TouchableOpacity, View } from 'react-native';
+import { Alert, FlatList, SafeAreaView, ScrollView, StyleSheet, Text, TextInput, TouchableOpacity, View } from 'react-native';
 import { useDispatch, useSelector } from 'react-redux';
 import { RootState } from '../src/store';
 import { deleteList } from '../src/store/slices/workspaceSlice';
@@ -50,7 +50,7 @@ export default function WorkSpaceScreen() {
   }
 
   return (
-    <View style={styles.root}>
+    <SafeAreaView style={styles.root}>
       <View style={styles.headerRow}>
         <Text style={styles.headerLeft}>Dashboard</Text>
         <Text style={styles.title}>WorkSpace</Text>
@@ -97,7 +97,7 @@ export default function WorkSpaceScreen() {
 
       <RecordAudioModal visible={audioOpen} onClose={() => setAudioOpen(false)} />
       <RecordVideoModal visible={videoOpen} onClose={() => setVideoOpen(false)} />
-    </View>
+    </SafeAreaView>
   );
 }
 

@@ -1,21 +1,23 @@
+import AsyncStorage from '@react-native-async-storage/async-storage';
 import { configureStore } from '@reduxjs/toolkit';
 import { combineReducers } from 'redux';
-import { persistStore, persistReducer } from 'redux-persist';
-import AsyncStorage from '@react-native-async-storage/async-storage';
-import todoReducer from './slices/todoSlice';
+import { persistReducer, persistStore } from 'redux-persist';
 import authReducer from './slices/authSlice';
+import todoReducer from './slices/todoSlice';
 import workspaceReducer from './slices/workspaceSlice';
+import settingsReducer from './slices/settingsSlice';
 
 const persistConfig = {
   key: 'root',
   storage: AsyncStorage,
-  whitelist: ['todo', 'auth'],
+  whitelist: ['todo', 'auth', 'workspace', 'settings'],
 };
 
 const rootReducer = combineReducers({
   todo: todoReducer,
   auth: authReducer,
   workspace: workspaceReducer,
+  settings: settingsReducer,
 });
 
 const persistedReducer = persistReducer(persistConfig, rootReducer as any);

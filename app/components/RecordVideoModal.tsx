@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
-import { Modal, View, Text, TouchableOpacity, TextInput, StyleSheet, Alert } from 'react-native';
-import { recordVideoSimulated } from '../../src/services/media';
+import { Alert, Modal, StyleSheet, Text, TextInput, TouchableOpacity, View } from 'react-native';
 import { useDispatch } from 'react-redux';
+import { recordVideoSimulated } from '../../src/services/media';
 import { addMediaToList } from '../../src/store/slices/workspaceSlice';
 
 export default function RecordVideoModal({ visible, onClose, listId }: { visible: boolean; onClose: () => void; listId?: string }) {

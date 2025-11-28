@@ -9,6 +9,8 @@ import { store, persistor } from '../src/store';
 import { View } from 'react-native';
 import HomeScreen from './screens/Home';
 import SignInScreen from './SignInScreen';
+import WorkSpaceScreen from './WorkSpaceScreen';
+import { SafeAreaView } from 'react-native-safe-area-context';
 
 export const unstable_settings = {
   anchor: '(tabs)',
@@ -21,11 +23,11 @@ export default function RootLayout() {
     <ThemeProvider value={colorScheme === 'dark' ? DarkTheme : DefaultTheme}>
       <Provider store={store}>
         <PersistGate loading={null} persistor={persistor}>
-          <View style={{ flex: 1 }}>
-            <Slot />
-            {/* <SignInScreen /> */}
+          <SafeAreaView style={{ flex: 1, marginHorizontal: 15 }}>
+            {/* <Slot /> */}
+            <WorkSpaceScreen />
             <StatusBar style="auto" />
-          </View>
+          </SafeAreaView>
         </PersistGate>
       </Provider>
     </ThemeProvider>

@@ -3,7 +3,7 @@ import { SafeAreaView } from 'react-native-safe-area-context';
 
 
 
-export default function TabTwoScreen() {
+export default function Explore() {
   return (
     <SafeAreaView>
     <View style={styles.containers}>
