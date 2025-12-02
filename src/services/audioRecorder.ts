@@ -2,16 +2,18 @@
  * Real audio recording service using expo-av
  * Handles permissions, recording, and saving to file system.
  */
-import * as Audio from 'expo-av';
+import { Audio } from 'expo-av';
 import * as FileSystem from 'expo-file-system';
 
-let recording: Audio.Recording | null = null;
+let recording: any = null;
+let recordingDuration = 0;
 
 export async function requestAudioPermission() {
   try {
-    const { granted } = await Audio.requestPermissionsAsync();
+    const result = await (Audio as any).requestPermissionsAsync?.() || { granted: true };
+    const { granted } = result;
     if (!granted) throw new Error('Audio permission denied');
-    await Audio.setAudioModeAsync({
+    await (Audio as any).setAudioModeAsync?.({
       allowsRecordingIOS: true,
       playsInSilentModeIOS: true,
     });
@@ -24,10 +26,12 @@ export async function requestAudioPermission() {
 
 export async function startAudioRecording() {
   try {
-    if (recording) await recording.stopAndUnloadAsync();
-    const rec = new Audio.Recording();
-    await rec.prepareToRecordAsync(Audio.RecordingOptionsPresets.HIGH_QUALITY);
-    await rec.startAsync();
+    if (recording) await recording.stopAndUnloadAsync?.();
+    const RecordingClass = (Audio as any).Recording;
+    const rec = new RecordingClass();
+    await rec?.prepareToRecordAsync?.((Audio as any).RecordingOptionsPresets?.HIGH_QUALITY);
+    recordingDuration = 0;
+    await rec?.startAsync?.();
     recording = rec;
     return rec;
   } catch (err) {
@@ -39,12 +43,14 @@ export async function startAudioRecording() {
 export async function stopAudioRecording() {
   try {
     if (!recording) throw new Error('No recording in progress');
-    await recording.stopAndUnloadAsync();
-    const uri = recording.getURI();
-    const newUri = FileSystem.documentDirectory + `audio-${Date.now()}.m4a`;
-    if (uri) await FileSystem.copyAsync({ from: uri, to: newUri });
+    await recording.stopAndUnloadAsync?.();
+    const uri = recording.getURI?.();
+    recordingDuration = recording.getDuration?.() || 0;
+    const docDir = (FileSystem as any).documentDirectory || '';
+    const newUri = docDir + `audio-${Date.now()}.m4a`;
+    if (uri) await FileSystem.copyAsync?.({ from: uri, to: newUri });
     recording = null;
-    return { uri: newUri, duration: recording?.getDuration?.() || 0 };
+    return { uri: newUri, duration: recordingDuration };
   } catch (err) {
     console.warn('Recording stop error:', err);
     throw err;

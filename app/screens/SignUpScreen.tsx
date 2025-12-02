@@ -1,7 +1,7 @@
 import { useRouter } from 'expo-router';
 import React, { useCallback, useMemo, useState } from 'react';
 import { Alert, StyleSheet, Text, TextInput, TouchableOpacity, View } from 'react-native';
-import { signUp } from '../src/services/auth';
+import { signUp } from '../../src/services/auth';
 
 function validateEmail(email: string) {
   return /\S+@\S+\.\S+/.test(email);

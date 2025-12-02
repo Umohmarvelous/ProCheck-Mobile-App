@@ -2,7 +2,7 @@ import { useRouter } from 'expo-router';
 import React, { useState } from 'react';
 import { Alert, StyleSheet, Text, TextInput, TouchableOpacity, View } from 'react-native';
 import { useDispatch } from 'react-redux';
-import { addList } from '../src/store/slices/workspaceSlice';
+import { addList } from '../../src/store/slices/workspaceSlice';
 
 function makeId() {
   return String(Date.now()) + Math.random().toString(36).slice(2, 8);

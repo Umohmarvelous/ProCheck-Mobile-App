@@ -1,6 +1,6 @@
 /**
- * Below are the colors that are used in the app. The colors are defined in the light and dark mode.
- * There are many other ways to style your app. For example, [Nativewind](https://www.nativewind.dev/), [Tamagui](https://tamagui.dev/), [unistyles](https://reactnativeunistyles.vercel.app), etc.
+ * Glassmorphic Theme System
+ * Modern UI design with blur effects, transparency, and layered glass containers
  */
 
 import { Platform } from 'react-native';
@@ -29,13 +29,9 @@ export const Colors = {
 
 export const Fonts = Platform.select({
   ios: {
-    /** iOS `UIFontDescriptorSystemDesignDefault` */
     sans: 'system-ui',
-    /** iOS `UIFontDescriptorSystemDesignSerif` */
     serif: 'ui-serif',
-    /** iOS `UIFontDescriptorSystemDesignRounded` */
     rounded: 'ui-rounded',
-    /** iOS `UIFontDescriptorSystemDesignMonospaced` */
     mono: 'ui-monospace',
   },
   default: {
@@ -51,3 +47,143 @@ export const Fonts = Platform.select({
     mono: "SFMono-Regular, Menlo, Monaco, Consolas, 'Liberation Mono', 'Courier New', monospace",
   },
 });
+
+/**
+ * Glassmorphic Design System
+ * Modern UI with blur, transparency, and glass effect containers
+ */
+
+export const GlassTheme = {
+  // Light mode colors
+  light: {
+    // background
+    background: '#dededeff',
+
+    // Glass containers - semi-transparent with blur
+    glassLight: 'rgba(255, 255, 255, 0.7)',
+    glassMedium: 'rgba(255, 255, 255, 0.5)',
+    glassDark: 'rgba(255, 255, 255, 0.3)',
+    
+    // Gradient overlays
+    glassOverlay: 'rgba(0, 0, 0, 0.08)',
+    
+    // Primary colors
+    primary: '#0a84ff',
+    primaryLight: '#5ac8fa',
+    
+    // Secondary colors
+    secondary: '#908fd5ff',
+    success: '#7bc18cff',
+    warning: '#916931ff',
+    danger: '#d86b6dff',
+    
+    // Text colors
+    text: '#000000',
+    textSecondary: '#666666',
+    textTertiary: '#999999',
+    
+    // Borders
+    borderLight: 'rgba(0, 0, 0, 0.1)',
+    borderMedium: 'rgba(0, 0, 0, 0.2)',
+  },
+
+  // Dark mode colors
+  dark: {
+    // background
+    background: '#212121ff',
+
+    // Glass containers - semi-transparent with blur
+    glassLight: 'rgba(255, 255, 255, 0.1)',
+    glassMedium: 'rgba(255, 255, 255, 0.08)',
+    glassDark: 'rgba(255, 255, 255, 0.05)',
+    
+    // Gradient overlays
+    glassOverlay: 'rgba(255, 255, 255, 0.08)',
+    
+    // Primary colors
+    primary: '#0a84ff',
+    primaryLight: '#5ac8fa',
+    
+    // Secondary colors
+    check: '#02be21ff',
+    checkLight: 'rgba(53, 251, 86, 0.68)',
+    // checkLighter: '#bbffc6ff',
+    // success: '#34c759',
+    secondary: '#5856d6',
+    warning: '#ff9500ff',
+    danger: '#ff4d4f',
+    
+    // Text colors
+    text: '#ffffff',
+    textSecondary: '#b0b0b0',
+    textTertiary: '#393838ff',
+    
+    // Borders
+    borderLight: 'rgba(255, 255, 255, 0.1)',
+    borderMedium: 'rgba(255, 255, 255, 0.2)',
+  },
+
+  // Blur intensity values
+  blur: {
+    subtle: 10,
+    light: 20,
+    medium: 40,
+    heavy: 60,
+    intense: 90,
+  },
+
+  // Shadow styles
+  shadow: {
+    subtle: {
+      shadowColor: '#000',
+      shadowOffset: { width: 0, height: 2 },
+      shadowOpacity: 0.08,
+      shadowRadius: 4,
+      elevation: 2,
+    },
+    light: {
+      shadowColor: '#000',
+      shadowOffset: { width: 0, height: 4 },
+      shadowOpacity: 0.12,
+      shadowRadius: 8,
+      elevation: 4,
+    },
+    medium: {
+      shadowColor: '#000',
+      shadowOffset: { width: 0, height: 8 },
+      shadowOpacity: 0.15,
+      shadowRadius: 12,
+      elevation: 6,
+    },
+    heavy: {
+      shadowColor: '#000',
+      shadowOffset: { width: 0, height: 12 },
+      shadowOpacity: 0.2,
+      shadowRadius: 16,
+      elevation: 8,
+    },
+  },
+
+  // Border radius values
+  radius: {
+    small: 8,
+    medium: 12,
+    large: 16,
+    extraLarge: 30,
+    extraxLarge: 50,
+    round: 9999,
+  },
+
+  // Spacing values
+  spacing: {
+    xs: 4,
+    sm: 8,
+    md: 12,
+    lg: 16,
+    xl: 20,
+    xxl: 24,
+  },
+};
+
+export default GlassTheme;
+

@@ -1,27 +1,26 @@
 import { useRouter } from 'expo-router';
 import React, { useState } from 'react';
 import { Alert, StyleSheet, Text, TextInput, TouchableOpacity, View } from 'react-native';
-import { verifyCode } from '../src/services/auth';
-import { getResetEmail, setResetCode } from '../src/services/authTemp';
+import { requestPasswordReset } from '../../src/services/auth';
+import { setResetEmail } from '../../src/services/authTemp';
 
-export default function CodeVerification() {
-  const emailParam = getResetEmail();
-  const [code, setCode] = useState('');
-  const [networkError, setNetworkError] = useState(false);
+export default function ForgotEmailInput() {
+  const [email, setEmail] = useState('');
   const [loading, setLoading] = useState(false);
+  const [networkError, setNetworkError] = useState(false);
   const router = useRouter();
 
-  async function onVerify() {
+  async function send() {
     setNetworkError(false);
     setLoading(true);
-    try {
-  if (!emailParam) throw new Error('Missing email');
-  await verifyCode(String(emailParam), code.trim());
-  setResetCode(code.trim());
-  (router.push('/NewPasswordScreen') as any);
+  try {
+  await requestPasswordReset(email.trim());
+  setResetEmail(email.trim());
+  Alert.alert('Code sent', 'Check your email for a verification code');
+  (router.push('/CodeVerification') as any);
     } catch (err: any) {
       if (err.message === 'NETWORK') setNetworkError(true);
-      else Alert.alert('Verification failed', err.message || 'Invalid code');
+      else Alert.alert('Error', err.message || 'Failed to send code');
     } finally {
       setLoading(false);
     }
@@ -29,11 +28,10 @@ export default function CodeVerification() {
 
   return (
     <View style={styles.root}>
-      <Text style={styles.title}>Enter verification code</Text>
+      <Text style={styles.title}>Reset password</Text>
       {networkError && <Text style={styles.networkError}>Loading Failed: Check your internet connection</Text>}
-      <Text style={{ marginBottom: 8 }}>Code sent to {emailParam}</Text>
-      <TextInput placeholder="Code" value={code} onChangeText={setCode} style={styles.input} />
-      <TouchableOpacity onPress={onVerify} style={styles.btn} disabled={!code || loading}><Text style={{ color: '#fff' }}>{loading ? 'Verifying…' : 'Verify'}</Text></TouchableOpacity>
+      <TextInput placeholder="Email" value={email} onChangeText={setEmail} style={styles.input} keyboardType="email-address" autoCapitalize="none" />
+      <TouchableOpacity onPress={send} style={styles.btn} disabled={!email || loading}><Text style={{ color: '#fff' }}>{loading ? 'Sending…' : 'Send code'}</Text></TouchableOpacity>
     </View>
   );
 }

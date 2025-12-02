@@ -1,8 +1,8 @@
-import React, { useState } from 'react';
-import { View, Text, TextInput, TouchableOpacity, StyleSheet, Alert } from 'react-native';
-import { setNewPassword } from '../src/services/auth';
 import { useRouter } from 'expo-router';
-import { getResetEmail, getResetCode, clearReset } from '../src/services/authTemp';
+import React, { useState } from 'react';
+import { Alert, StyleSheet, Text, TextInput, TouchableOpacity, View } from 'react-native';
+import { setNewPassword } from '../../src/services/auth';
+import { clearReset, getResetCode, getResetEmail } from '../../src/services/authTemp';
 
 export default function NewPasswordScreen() {
   const emailParam = getResetEmail();

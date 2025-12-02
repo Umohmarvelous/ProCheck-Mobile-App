@@ -5,10 +5,10 @@ import { SafeAreaView } from 'react-native-safe-area-context';
 
 export default function Explore() {
   return (
-    <SafeAreaView>
-    <View style={styles.containers}>
+    <SafeAreaView style={styles.containers}>
+    {/* <View > */}
       <Text>Explore Page</Text>
-    </View>
+    {/* </View> */}
     </SafeAreaView>
   );
 }
@@ -16,7 +16,10 @@ export default function Explore() {
 const styles = StyleSheet.create({
   containers: {
     flex:1,
+    // width: '300%',
     justifyContent:'center',
-    alignItems:'center'
+    alignItems:'center',
+    borderWidth: 3,
+    borderColor: 'green'
   }
 });

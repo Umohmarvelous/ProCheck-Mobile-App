@@ -1,9 +1,10 @@
-import React, { useState, useMemo, useCallback } from 'react';
-import { View, Text, TextInput, StyleSheet, TouchableOpacity, Alert } from 'react-native';
-import { useDispatch } from 'react-redux';
-import { setUser } from '../src/store/slices/authSlice';
-import { signIn } from '../src/services/auth';
 import { useRouter } from 'expo-router';
+import React, { useCallback, useMemo, useState } from 'react';
+import { Alert, Button, StyleSheet, Text, TextInput, TouchableOpacity, View } from 'react-native';
+import { useDispatch } from 'react-redux';
+import { signIn } from '../../src/services/auth';
+import { setUser } from '../../src/store/slices/authSlice';
+import { Link } from '@react-navigation/native';
 
 function validateEmail(email: string) {
   return /\S+@\S+\.\S+/.test(email);
@@ -32,7 +33,7 @@ export default function SignInScreen() {
       const user = await signIn(email.trim(), password);
   dispatch(setUser({ user: { id: user.id, fullname: user.fullname, email: user.email, country: user.country }, token: user.token }));
   // navigate to profile or root
-  (router.replace('/ProfileScreen') as any);
+  (router.replace('/') as any);
     } catch (err: any) {
       if (err.message === 'NETWORK') {
         setNetworkError(true);
@@ -73,12 +74,13 @@ export default function SignInScreen() {
       </TouchableOpacity>
 
       <View style={styles.linksRow}>
-          <TouchableOpacity onPress={() => (router.push('/SignUpScreen') as any)}>
+          <TouchableOpacity onPress={() => (router.push('/') as any)}>
             <Text style={styles.link}>Don’t have an account? Register here</Text>
           </TouchableOpacity>
-          <TouchableOpacity onPress={() => (router.push('/ForgotEmailInput') as any)}>
+          {/* <Link onPress={() => (router.navigate('/screens/SignUpScreen') )}>
             <Text style={styles.link}>Forgot password?</Text>
-          </TouchableOpacity>
+          </Link> */}
+           <Button title="Go to About" onPress={() => router.navigate('/screens/SignUpScreen')} />
       </View>
 
       <View style={styles.socialBox}>

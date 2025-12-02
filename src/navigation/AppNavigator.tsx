@@ -3,7 +3,7 @@ import { NavigationContainer } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import React from 'react';
 import { Text, View } from 'react-native';
-import HomeScreen from '../../app/screens/Home';
+import HomeScreen from '../../app/Home';
 import SettingsScreen from '../../app/screens/Settings';
 import WorkspaceScreen from '../../app/screens/Workspace';
 

@@ -1,22 +1,22 @@
 import React, { useCallback, useMemo } from 'react';
-import { View, Text, ScrollView, StyleSheet, TouchableOpacity, Switch, Picker } from 'react-native';
-import { useSelector, useDispatch } from 'react-redux';
-import { RootState } from '../src/store';
+import { ScrollView, StyleSheet, Switch, Text, TouchableOpacity, View } from 'react-native';
+import { useDispatch, useSelector } from 'react-redux';
+import { RootState } from '../../src/store';
 import {
-  toggleDarkMode,
-  setTheme,
-  setTextSize,
-  setNotificationsEnabled,
-  setEmailNotifications,
-  setAutoSync,
-  setSyncInterval,
-  setLanguage,
-  setPrivacyMode,
-  setDeletedAccountsSync,
-  setOfflineMode,
-  setAnalyticsEnabled,
   resetSettings,
-} from '../src/store/slices/settingsSlice';
+  setAnalyticsEnabled,
+  setAutoSync,
+  setDeletedAccountsSync,
+  setEmailNotifications,
+  setLanguage,
+  setNotificationsEnabled,
+  setOfflineMode,
+  setPrivacyMode,
+  setSyncInterval,
+  setTextSize,
+  setTheme,
+  toggleDarkMode,
+} from '../../src/store/slices/settingsSlice';
 
 export default function SettingsScreen() {
   const dispatch = useDispatch();
@@ -77,18 +77,18 @@ export default function SettingsScreen() {
 
   // Memoize setting items for performance
   const settingItems = useMemo(() => [
-    { label: 'Dark Mode', value: settings.darkMode, onToggle: handleDarkModeToggle, type: 'toggle' },
-    { label: 'Theme', value: settings.theme, onChange: handleThemeChange, options: ['blue', 'green', 'purple'], type: 'picker' },
-    { label: 'Text Size', value: settings.textSize, onChange: handleTextSizeChange, options: ['small', 'medium', 'large'], type: 'picker' },
-    { label: 'Notifications', value: settings.notificationsEnabled, onToggle: handleNotificationsToggle, type: 'toggle' },
-    { label: 'Email Notifications', value: settings.emailNotifications, onToggle: handleEmailNotificationsToggle, type: 'toggle' },
-    { label: 'Auto Sync', value: settings.autoSync, onToggle: handleAutoSyncToggle, type: 'toggle' },
-    { label: 'Language', value: settings.language, onChange: handleLanguageChange, options: ['en', 'es', 'fr', 'de'], type: 'picker' },
-    { label: 'Privacy Mode', value: settings.privacyMode, onToggle: handlePrivacyModeToggle, type: 'toggle' },
-    { label: 'Sync Deleted Accounts', value: settings.deletedAccountsSync, onToggle: handleDeletedAccountsSyncToggle, type: 'toggle' },
-    { label: 'Offline Mode', value: settings.offlineMode, onToggle: handleOfflineModeToggle, type: 'toggle' },
-    { label: 'Analytics', value: settings.analyticsEnabled, onToggle: handleAnalyticsToggle, type: 'toggle' },
-    { label: 'Sync Interval (minutes)', value: settings.syncInterval, onChangeText: handleSyncIntervalChange, type: 'number' },
+    { label: 'Dark Mode', value: settings.darkMode, onToggle: handleDarkModeToggle, type: 'toggle' as const },
+    { label: 'Theme', value: settings.theme, onChange: handleThemeChange, options: ['blue', 'green', 'purple'], type: 'picker' as const },
+    { label: 'Text Size', value: settings.textSize, onChange: handleTextSizeChange, options: ['small', 'medium', 'large'], type: 'picker' as const },
+    { label: 'Notifications', value: settings.notificationsEnabled, onToggle: handleNotificationsToggle, type: 'toggle' as const },
+    { label: 'Email Notifications', value: settings.emailNotifications, onToggle: handleEmailNotificationsToggle, type: 'toggle' as const },
+    { label: 'Auto Sync', value: settings.autoSync, onToggle: handleAutoSyncToggle, type: 'toggle' as const },
+    { label: 'Language', value: settings.language, onChange: handleLanguageChange, options: ['en', 'es', 'fr', 'de'], type: 'picker' as const },
+    { label: 'Privacy Mode', value: settings.privacyMode, onToggle: handlePrivacyModeToggle, type: 'toggle' as const },
+    { label: 'Sync Deleted Accounts', value: settings.deletedAccountsSync, onToggle: handleDeletedAccountsSyncToggle, type: 'toggle' as const },
+    { label: 'Offline Mode', value: settings.offlineMode, onToggle: handleOfflineModeToggle, type: 'toggle' as const },
+    { label: 'Analytics', value: settings.analyticsEnabled, onToggle: handleAnalyticsToggle, type: 'toggle' as const },
+    { label: 'Sync Interval (minutes)', value: settings.syncInterval, onChangeText: handleSyncIntervalChange, type: 'number' as const },
   ], [settings, handleDarkModeToggle, handleThemeChange, handleTextSizeChange, handleNotificationsToggle, handleEmailNotificationsToggle, handleAutoSyncToggle, handleLanguageChange, handlePrivacyModeToggle, handleDeletedAccountsSyncToggle, handleOfflineModeToggle, handleAnalyticsToggle, handleSyncIntervalChange]);
 
   return (
@@ -99,14 +99,12 @@ export default function SettingsScreen() {
         <View key={idx} style={styles.setting}>
           <Text style={styles.label}>{item.label}</Text>
           {item.type === 'toggle' && (
-            <Switch value={item.value} onValueChange={item.onToggle} />
+            <Switch value={typeof item.value === 'boolean' ? item.value : false} onValueChange={item.onToggle as (value: boolean) => void} />
           )}
           {item.type === 'picker' && (
-            <Picker selectedValue={item.value} onValueChange={item.onChange} style={styles.picker}>
-              {item.options?.map((opt: any) => (
-                <Picker.Item key={opt} label={opt} value={opt} />
-              ))}
-            </Picker>
+            <TouchableOpacity style={styles.pickerBtn} onPress={() => item.onChange?.(item.options?.[0])}>
+              <Text style={styles.pickerText}>{item.value}</Text>
+            </TouchableOpacity>
           )}
           {item.type === 'number' && (
             <Text style={styles.value}>{item.value} min</Text>
@@ -128,5 +126,7 @@ const styles = StyleSheet.create({
   label: { fontSize: 16, fontWeight: '600' },
   value: { fontSize: 14, color: '#666' },
   picker: { flex: 0.4, height: 40 },
+  pickerBtn: { backgroundColor: '#f0f0f0', padding: 8, borderRadius: 6 },
+  pickerText: { fontSize: 14, color: '#333', textTransform: 'capitalize' },
   btn: { backgroundColor: '#0a84ff', padding: 14, borderRadius: 8, alignItems: 'center', marginTop: 20, marginBottom: 40 },
 });

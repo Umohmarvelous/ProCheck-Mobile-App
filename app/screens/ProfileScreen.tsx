@@ -2,8 +2,8 @@ import { useRouter } from 'expo-router';
 import React, { useState } from 'react';
 import { Alert, StyleSheet, Text, TextInput, TouchableOpacity, View } from 'react-native';
 import { useDispatch, useSelector } from 'react-redux';
-import { RootState } from '../src/store';
-import { clearUser, updateProfile } from '../src/store/slices/authSlice';
+import { RootState } from '../../src/store';
+import { clearUser, updateProfile } from '../../src/store/slices/authSlice';
 
 export default function ProfileScreen() {
   const user = useSelector((s: RootState) => s.auth?.user);

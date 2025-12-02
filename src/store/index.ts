@@ -3,9 +3,9 @@ import { configureStore } from '@reduxjs/toolkit';
 import { combineReducers } from 'redux';
 import { persistReducer, persistStore } from 'redux-persist';
 import authReducer from './slices/authSlice';
+import settingsReducer from './slices/settingsSlice';
 import todoReducer from './slices/todoSlice';
 import workspaceReducer from './slices/workspaceSlice';
-import settingsReducer from './slices/settingsSlice';
 
 const persistConfig = {
   key: 'root',

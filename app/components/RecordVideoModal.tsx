@@ -1,29 +1,42 @@
-import React, { useState } from 'react';
+import React, { useCallback, useRef, useState } from 'react';
 import { Alert, Modal, StyleSheet, Text, TextInput, TouchableOpacity, View } from 'react-native';
 import { useDispatch } from 'react-redux';
-import { recordVideoSimulated } from '../../src/services/media';
+import { recordVideoSimulated } from '../../src/services/videoRecorder';
 import { addMediaToList } from '../../src/store/slices/workspaceSlice';
 
 export default function RecordVideoModal({ visible, onClose, listId }: { visible: boolean; onClose: () => void; listId?: string }) {
   const [desc, setDesc] = useState('');
   const [recording, setRecording] = useState(false);
   const dispatch = useDispatch();
+  const recordingRef = useRef<any>(null);
 
-  async function onRecord() {
+  const onStartRecord = useCallback(async () => {
     setRecording(true);
+    // In real implementation, initialize camera recording here
+  }, []);
+
+  const onStopRecord = useCallback(async () => {
     try {
       const res = await recordVideoSimulated(2000);
       const item = { id: `video-${Date.now()}`, title: desc || 'Video note', createdAt: new Date().toISOString(), owner: 'me', description: res.uri };
       dispatch(addMediaToList({ listId, item }));
       Alert.alert('Recorded', 'Video recorded and added to workspace');
       setDesc('');
+      setRecording(false);
       onClose();
-    } catch (e) {
-      Alert.alert('Recording failed');
-    } finally {
+    } catch (err) {
+      Alert.alert('Recording failed', (err as any).message || 'Could not record video');
       setRecording(false);
     }
-  }
+  }, [desc, dispatch, listId, onClose]);
+
+  const handleClose = useCallback(() => {
+    if (recording) {
+      recordingRef.current?.stopAsync().catch(() => {});
+      setRecording(false);
+    }
+    onClose();
+  }, [recording, onClose]);
 
   return (
     <Modal visible={visible} transparent animationType="slide">
@@ -31,10 +44,16 @@ export default function RecordVideoModal({ visible, onClose, listId }: { visible
         <View style={styles.box}>
           <Text style={styles.title}>Record Video</Text>
           <TextInput placeholder="Description (optional)" value={desc} onChangeText={setDesc} style={styles.input} />
-          <TouchableOpacity onPress={onRecord} style={[styles.btn, recording && { opacity: 0.6 }]} disabled={recording}>
-            <Text style={{ color: '#fff' }}>{recording ? 'Recording…' : 'Start Recording'}</Text>
-          </TouchableOpacity>
-          <TouchableOpacity onPress={onClose} style={[styles.btn, { backgroundColor: '#ccc', marginTop: 8 }]}><Text>Close</Text></TouchableOpacity>
+          {!recording ? (
+            <TouchableOpacity onPress={onStartRecord} style={styles.btn}>
+              <Text style={{ color: '#fff' }}>Start Recording</Text>
+            </TouchableOpacity>
+          ) : (
+            <TouchableOpacity onPress={onStopRecord} style={[styles.btn, { backgroundColor: '#ff4d4f' }]}>
+              <Text style={{ color: '#fff' }}>Stop Recording</Text>
+            </TouchableOpacity>
+          )}
+          <TouchableOpacity onPress={handleClose} style={[styles.btn, { backgroundColor: '#ccc', marginTop: 8 }]}><Text>Cancel</Text></TouchableOpacity>
         </View>
       </View>
     </Modal>
