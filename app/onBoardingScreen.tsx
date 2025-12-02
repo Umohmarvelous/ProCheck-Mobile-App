@@ -33,6 +33,10 @@ export default function BoardingScreen() {
         </View>
       </View>
 
+      {/* <Link href="/screens/ProfileScreen" push asChild>
+         <Button title="Push Button" />
+      </Link> */}
+
       {/* <Link href="/screens/ProfileScreen" dismissTo asChild>
          <Button title="Push Button" />
       </Link> */}
@@ -44,6 +48,8 @@ export default function BoardingScreen() {
             >
             <Text style={[styles.buttonText, { color: theme.check } ]}>Get Started</Text>
           </TouchableOpacity> */}
+
+
 
       {/* Blurred bottom button */}
       <BlurView intensity={80} tint="default" style={[styles.blurButtonWrap]}>
@@ -83,7 +89,6 @@ const styles = StyleSheet.create({
   notepadShape: {
     width: "80%",
     height: "80%",
-    // backgroundColor: "#FFFFFF",
     backgroundColor: theme.dark.textSecondary,
     borderRadius: 40,
     transform: [{ rotate: "-10deg" }],
@@ -117,8 +122,6 @@ const styles = StyleSheet.create({
     paddingHorizontal: 22,
     paddingVertical: 20,
     overflow: "hidden",    
-    // borderWidth: 2,
-    // borderColor: 'red'
   },
   titleLine1: {
     fontSize: 46,

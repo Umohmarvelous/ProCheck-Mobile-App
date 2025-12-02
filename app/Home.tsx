@@ -23,6 +23,8 @@ import { deleteTodo, getAllTodos, initDb, insertTodo, updateTodoCompletion } fro
 import WorkSpaceScreen from "./screens/WorkSpaceScreen";
 import { Checkbox } from 'expo-checkbox';
 import { Link, useRouter } from 'expo-router';
+import RecordVideoModal from "./components/RecordVideoModal";
+import RecordAudioModal from "./components/RecordAudioModal";
 
 
 function makeId() {
@@ -295,63 +297,170 @@ export default function AppIo() {
 
         {/* Notes grid */}
         <View style={styles.notesRow}>
-          {/* Left note */}
-          <TouchableOpacity style={styles.noteCard}>
-            <View style={styles.noteImagePlaceholder} />
-            <Text style={styles.noteTitle}>Geometric poster collection</Text>
-            <Text style={styles.noteBody} numberOfLines={3}>
-              Geometric poster design focuses on the geometric lines,
-              shapes, and patterns that exist in modern art.
-            </Text>
-          </TouchableOpacity>
-          {/* <TouchableOpacity style={styles.noteCard}>
-            <View style={styles.noteImagePlaceholder} />
-            <Text style={styles.noteTitle}>Geometric poster collection</Text>
-            <Text style={styles.noteBody} numberOfLines={3}>
-              Geometric poster design focuses on the geometric lines,
-              shapes, and patterns that exist in modern art.
-            </Text>
-          </TouchableOpacity>
-          <TouchableOpacity style={styles.noteCard}>
-            <View style={styles.noteImagePlaceholder} />
-            <Text style={styles.noteTitle}>Geometric poster collection</Text>
-            <Text style={styles.noteBody} numberOfLines={3}>
-              Geometric poster design focuses on the geometric lines,
-              shapes, and patterns that exist in modern art.
-            </Text>
-          </TouchableOpacity>
-          <TouchableOpacity style={styles.noteCard}>
-            <View style={styles.noteImagePlaceholder} />
-            <Text style={styles.noteTitle}>Geometric poster collection</Text>
-            <Text style={styles.noteBody} numberOfLines={3}>
-              Geometric poster design focuses on the geometric lines,
-              shapes, and patterns that exist in modern art.
-            </Text>
-          </TouchableOpacity>
-          <TouchableOpacity style={styles.noteCard}>
-            <View style={styles.noteImagePlaceholder} />
-            <Text style={styles.noteTitle}>Geometric poster collection</Text>
-            <Text style={styles.noteBody} numberOfLines={3}>
-              Geometric poster design focuses on the geometric lines,
-              shapes, and patterns that exist in modern art.
-            </Text>
-          </TouchableOpacity>
-          <TouchableOpacity style={styles.noteCard}>
-            <View style={styles.noteImagePlaceholder} />
-            <Text style={styles.noteTitle}>Geometric poster collection</Text>
-            <Text style={styles.noteBody} numberOfLines={3}>
-              Geometric poster design focuses on the geometric lines,
-              shapes, and patterns that exist in modern art.
-            </Text>
-          </TouchableOpacity> */}
-
           {/* Right locked note */}
+            <View style={[styles.noteCard,styles.lockedCard, ]}>
+              <Link href="/screens/WorkSpaceScreen" >
+                {/* <Link.Trigger>klklklklklk</Link.Trigger> */}
+                
+                  {/* <Link.Trigger style={styles.lockedNoteContent}>
+                    <Feather name="lock" size={32} color="#9CA3AF" />
+                  
+                    <Text style={styles.lockedText}>Locked Note</Text>
+                  </Link.Trigger> */}
+                {/* <Link.Preview style={{ width: 500, height: 500, }}/> */}
+
+
+              <Link.Trigger>About</Link.Trigger>
+              <Link.Trigger>Content</Link.Trigger>
+              <Link.Preview/>
+              </Link>
+            </View>
+
+
+
+
+            <Link href="/screens/SignUpScreen">
+              <Link.Trigger>About</Link.Trigger>
+              <Link.Trigger>Content</Link.Trigger>
+              <Link.Preview >
+                {/* <Image
+                  onLoad={e => setImageSize(e.nativeEvent.source)}
+                  source={source}
+                  style={{ width: '100%', height: '100%' }}
+                /> */}
+              </Link.Preview>
+            </Link>
+
+
+
+
+          {/* Left note */}
+          <TouchableOpacity style={[styles.noteCard]}>
+            <View style={styles.noteImagePlaceholder} />
+            <Text style={styles.noteTitle}>Geometric poster collection</Text>
+            <Text style={styles.noteBody} numberOfLines={3}>
+              Geometric poster design focuses on the geometric lines,
+              shapes, and patterns that exist in modern art.
+            </Text>
+            <Text style={styles.noteBody} numberOfLines={3}>
+              Geometric poster design focuses on the geometric lines,
+              shapes, and patterns that exist in modern art.
+            </Text>
+            <Text style={styles.noteBody} numberOfLines={3}>
+              Geometric poster design focuses on the geometric lines,
+              shapes, and patterns that exist in modern art.
+            </Text>
+            <Text style={styles.noteBody} numberOfLines={3}>
+              Geometric poster design focuses on the geometric lines,
+              shapes, and patterns that exist in modern art.
+            </Text>
+            <Text style={styles.noteBody} numberOfLines={3}>
+              Geometric poster design focuses on the geometric lines,
+              shapes, and patterns that exist in modern art.
+            </Text>
+          </TouchableOpacity>
+
           <TouchableOpacity style={styles.noteCard}>
+            <View style={styles.noteImagePlaceholder} />
+            <Text style={styles.noteTitle}>Geometric poster collection</Text>
+            <Text style={styles.noteBody} numberOfLines={3}>
+              Geometric poster design focuses on the geometric lines,
+              shapes, and patterns that exist in modern art.
+            </Text>
+            <Text style={styles.noteBody} numberOfLines={3}>
+              Geometric poster design focuses on the geometric lines,
+              shapes, and patterns that exist in modern art.
+            </Text>
+          </TouchableOpacity>
+
+          <TouchableOpacity style={styles.noteCard}>
+            <View style={styles.noteImagePlaceholder} />
+            <Text style={styles.noteTitle}>Geometric poster collection</Text>
+            <Text style={styles.noteBody} numberOfLines={3}>
+              Geometric poster design focuses on the geometric lines,
+              shapes, and patterns that exist in modern art.
+            </Text>
+            <Text style={styles.noteBody} numberOfLines={3}>
+              Geometric poster design focuses on the geometric lines,
+              shapes, and patterns that exist in modern art.
+            </Text>
+            <Text style={styles.noteBody} numberOfLines={3}>
+              Geometric poster design focuses on the geometric lines,
+              shapes, and patterns that exist in modern art.
+            </Text>
+            <Text style={styles.noteBody} numberOfLines={3}>
+              Geometric poster design focuses on the geometric lines,
+              shapes, and patterns that exist in modern art.
+            </Text>
+          </TouchableOpacity>
+
+          <TouchableOpacity style={styles.noteCard}>
+            <View style={styles.noteImagePlaceholder} />
+            <Text style={styles.noteTitle}>Geometric poster collection</Text>
+            <Text style={styles.noteBody} numberOfLines={3}>
+              Geometric poster design focuses on the geometric lines,
+              shapes, and patterns that exist in modern art.
+            </Text>
+          </TouchableOpacity>
+
+          <TouchableOpacity style={styles.noteCard}>
+            <View style={styles.noteImagePlaceholder} />
+            <Text style={styles.noteTitle}>Geometric poster collection</Text>
+            <Text style={styles.noteBody} numberOfLines={3}>
+              Geometric poster design focuses on the geometric lines,
+              shapes, and patterns that exist in modern art.
+            </Text>
+          </TouchableOpacity>
+          <TouchableOpacity style={styles.noteCard}>
+            <View style={styles.noteImagePlaceholder} />
+            <Text style={styles.noteTitle}>Geometric poster collection</Text>
+            <Text style={styles.noteBody} numberOfLines={3}>
+              Geometric poster design focuses on the geometric lines,
+              shapes, and patterns that exist in modern art.
+            </Text>
+            <Text style={styles.noteBody} numberOfLines={3}>
+              Geometric poster design focuses on the geometric lines,
+              shapes, and patterns that exist in modern art.
+            </Text>
+            <Text style={styles.noteBody} numberOfLines={3}>
+              Geometric poster design focuses on the geometric lines,
+              shapes, and patterns that exist in modern art.
+            </Text>
+            <Text style={styles.noteBody} numberOfLines={3}>
+              Geometric poster design focuses on the geometric lines,
+              shapes, and patterns that exist in modern art.
+            </Text>
+            <Text style={styles.noteBody} numberOfLines={3}>
+              Geometric poster design focuses on the geometric lines,
+              shapes, and patterns that exist in modern art.
+            </Text>
+            <Text style={styles.noteBody} numberOfLines={3}>
+              Geometric poster design focuses on the geometric lines,
+              shapes, and patterns that exist in modern art.
+            </Text>
+            <Text style={styles.noteBody} numberOfLines={3}>
+              Geometric poster design focuses on the geometric lines,
+              shapes, and patterns that exist in modern art.
+            </Text>
+          </TouchableOpacity>
+          {/* <Link href="/screens/SignUpScreen">
+            <Link.Trigger>About</Link.Trigger>
+            <Link.Preview />
+          </Link> */}
+          {/* <Link href="/screens/SignUpScreen">
+            <Link.Trigger>About</Link.Trigger>
+            <Link.Preview />
+          </Link> */}
+
+
+
+
+          {/* <TouchableOpacity style={styles.noteCard}>
             <View style={styles.lockedCard}>
               <Feather name="lock" size={32} color="#9CA3AF" />
               <Text style={styles.lockedText}>Locked Note</Text>
             </View>
-          </TouchableOpacity>
+          </TouchableOpacity> */}
         </View>
 
 
@@ -394,11 +503,12 @@ export default function AppIo() {
             <View style={styles.addWrap}>
               {addOpen && (
                 <BlurView intensity={50} style={styles.dropdownGlass}>
-                  <TouchableOpacity onPress={() => (r.push('/ImportScreen'), setAddOpen(false))} style={styles.dropItem}>
+                  <TouchableOpacity onPress={() => (router.push("/screens/ImportScreen"), setAddOpen(false))} style={styles.dropItem}>
                     <Text style={{ color: theme.text, fontWeight: '500' }}>Import</Text>
                   </TouchableOpacity>
                   
-                  <TouchableOpacity onPress={() => (r.push('/CreateTodosScreen'), setAddOpen(false))} style={styles.dropItem}>
+                  
+                  <TouchableOpacity onPress={() => (router.push("/screens/CreateTodosScreen"), setAddOpen(false))} style={styles.dropItem}>
                     <Text style={{ color: theme.text, fontWeight: '500' }}>Create Todos</Text>
                   </TouchableOpacity>
 
@@ -415,11 +525,16 @@ export default function AppIo() {
 
 
             <BlurView intensity={50} tint="dark" style={[styles.bottomButton]}>
-                <TouchableOpacity>
+                <TouchableOpacity onPress={() => router.push("/screens/SettingsScreen")}>
                   <Feather name="sliders" size={22} color={theme.textSecondary} />
                 </TouchableOpacity>
             </BlurView>
         </View>
+
+
+        <RecordAudioModal visible={audioOpen} onClose={() => setAudioOpen(false)} />
+        <RecordVideoModal visible={videoOpen} onClose={() => setVideoOpen(false)} />
+
 
     </SafeAreaView>
   );
@@ -482,6 +597,7 @@ const styles = StyleSheet.create({
     // borderWidth: 1,
     // borderColor: 'rgba(255, 255, 255, 0.3)',
     ...GlassTheme.shadow.light,
+    
   },
   header: { 
     padding: 16,
@@ -616,11 +732,11 @@ const styles = StyleSheet.create({
   todoTitle: {
     fontSize: 25,
     fontWeight: "800",
-    color: theme.dark.textTertiary,
+    color: theme.dark.textSecondary,
   },
   todoSubtitle: {
     fontSize: 13,
-    color: theme.dark.textTertiary,
+    color: theme.dark.textSecondary,
     marginTop: 4,
   },
   // expandBtn: {
@@ -676,40 +792,58 @@ const styles = StyleSheet.create({
   notesRow: {
     flexDirection: "row",
     justifyContent: "space-between",
-    // flexWrap: 'wrap'
+    gap: 2,
+    flexWrap: 'wrap'
   },
   noteCard: {
-    flex: 1,
+    // flex: 1,
+    minWidth: 178,
+    maxWidth: 178,
+    minHeight: 'auto',
+    // height: 200,
+    maxHeight: 350,
+    overflow: 'hidden',
     backgroundColor: theme.dark.glassDark,
     borderRadius: CARD_RADIUS.extraLarge,
-    padding: 14,
-    marginRight: 10,
+    padding: 10,
+    marginVertical: 5
   },
   noteImagePlaceholder: {
     height: 110,
     borderRadius:  CARD_RADIUS.extraLarge,
-    backgroundColor: "#E5E7EB",
+    backgroundColor: theme.dark.glassMedium,
     marginBottom: 10,
   },
   noteTitle: {
     fontSize: 19,
     fontWeight: "600",
+    textAlign: 'justify',
     color: theme.dark.checkLight,
     marginBottom: 6,
   },
   noteBody: {
-    fontSize: 12,
+    fontSize: 13,
+    textAlign: 'justify',
     color: "#6B7280",
   },
   lockedCard: {
+    width: 270,
+    height: 240,
+    borderRadius: 20,
+    backgroundColor: theme.dark.glassDark,
+    borderWidth: 2,
+    borderColor: 'blue',
+  },
+  lockedNoteContent:{
     flex: 1,
-    // borderRadius: 20,
-    // backgroundColor: theme.dark.glassDark,
-    alignItems: "center",
-    justifyContent: "center",
+    width: 270,
+    height: 240,
+    flexDirection: 'column',
+    alignItems: 'center',
+    justifyContent: 'center',
+    gap: 7,
   },
   lockedText: {
-    marginTop: 8,
     fontSize: 13,
     color: "#9CA3AF",
   },
@@ -718,7 +852,6 @@ const styles = StyleSheet.create({
     position: 'relative', 
     right: 0, 
     left: 0,
-    // bottom: 10, 
     alignSelf: 'center',
     justifyContent: 'center',
   },

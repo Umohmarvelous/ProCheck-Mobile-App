@@ -120,7 +120,7 @@ export default function SettingsScreen() {
 }
 
 const styles = StyleSheet.create({
-  root: { flex: 1, padding: 16 },
+  root: { flex: 1, padding: 16, backgroundColor: '' },
   title: { fontSize: 24, fontWeight: '700', marginBottom: 12 },
   setting: { flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', paddingVertical: 12, borderBottomWidth: 1, borderBottomColor: '#eee' },
   label: { fontSize: 16, fontWeight: '600' },

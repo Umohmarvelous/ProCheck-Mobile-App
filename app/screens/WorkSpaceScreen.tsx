@@ -14,7 +14,7 @@ const styles = StyleSheet.create({
   root: { 
     flex: 1, 
     padding: 12,
-    backgroundColor: 'rgba(255, 255, 255, 0.5)',
+    backgroundColor: '#212121ff',
   },
   headerGlass: {
     borderRadius: 14,
