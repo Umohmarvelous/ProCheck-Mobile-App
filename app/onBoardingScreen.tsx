@@ -28,7 +28,7 @@ export default function BoardingScreen() {
         <Text style={[styles.titleLine1 ]}>All your ideas</Text>
           <Text style={styles.titleLine2Black}> in </Text>
           <BlurView intensity={30} tint="light" style={styles.titleChip}>
-            <Text style={ [styles.titleLine2Black , { color: theme.check }]}>one place</Text>
+            <Text style={ [styles.titleLine2Black , { color: theme.checkerPrimary }]}>one place</Text>
           </BlurView>
         </View>
       </View>
@@ -58,7 +58,7 @@ export default function BoardingScreen() {
             activeOpacity={0.8}
             style={styles.buttonInner}
             >
-            <Text style={[styles.buttonText, { color: theme.check } ]}>Get Started</Text>
+            <Text style={[styles.buttonText, { color: theme.checkerPrimary } ]}>Get Started</Text>
           </TouchableOpacity>
         </Link>
       </BlurView>
@@ -108,7 +108,7 @@ const styles = StyleSheet.create({
     position: "absolute",
     width: 40,
     height: "90%",
-    backgroundColor: theme.dark.check,
+    backgroundColor: theme.dark.checkerPrimary,
     borderRadius: 20,
     right: "13%",
     transform: [{ rotate: "10deg" }],

@@ -8,6 +8,7 @@ import { SafeAreaView } from 'react-native-safe-area-context';
 import { Provider } from 'react-redux';
 import { PersistGate } from 'redux-persist/integration/react';
 import { persistor, store } from '../src/store';
+import { ScheduleProvider } from '@/context/ScheduleContext';
 
 // Keep the splash screen visible while we fetch resources
 SplashScreen.preventAutoHideAsync();
@@ -50,6 +51,8 @@ export default function RootLayout() {
     <ThemeProvider value={colorScheme === 'dark' ? DarkTheme : DefaultTheme}>
       <Provider store={store}>
         <PersistGate loading={null} persistor={persistor}>
+      <ScheduleProvider>
+
           <SafeAreaView style={{ flex: 1, backgroundColor: '#212121ff' }}>
                 <Stack screenOptions={{ 
                   headerShown: false,
@@ -59,6 +62,8 @@ export default function RootLayout() {
                 </Stack>
             <StatusBar style='light'/>
           </SafeAreaView>
+                </ScheduleProvider>
+
         </PersistGate>
       </Provider>
     </ThemeProvider>

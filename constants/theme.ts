@@ -71,6 +71,20 @@ export const GlassTheme = {
     primary: '#0a84ff',
     primaryLight: '#5ac8fa',
     
+
+    // Color Palete
+    checkerPrimary: '#02be21',
+    checkerBackground: '#F4F9F5',
+    checkerSurface: '#FFFFFF',
+    checkerText: '#1A1C1A',
+    checkerTextSecondary: '#6E7570',
+    checkerBorder: '#E0E0E0',
+    checkerSuccess: '#02be21', // Your green is naturally a success color
+    checkerError: '#D32F2F',
+    checkerHighlight: '#D1F2D6',
+
+
+
     // Secondary colors
     secondary: '#908fd5ff',
     success: '#7bc18cff',
@@ -93,22 +107,33 @@ export const GlassTheme = {
     background: '#212121ff',
 
     // Glass containers - semi-transparent with blur
-    glassLight: 'rgba(255, 255, 255, 0.1)',
-    glassMedium: 'rgba(255, 255, 255, 0.08)',
-    glassDark: 'rgba(255, 255, 255, 0.05)',
+    glassLight: '#ffffff1a',
+    glassMedium: '#ffffff14',
+    glassDark: '#ffffff0d',
     
     // Gradient overlays
-    glassOverlay: 'rgba(255, 255, 255, 0.08)',
+    glassOverlay: '#ffffff14',
     
     // Primary colors
     primary: '#0a84ff',
     primaryLight: '#5ac8fa',
     
+    checkerPrimary: '#02be21',
+    checkerBackground: '#121212',
+    checkerSurface: '#212121ff',
+    checkerText: '#E4E6E4',
+    checkerTextMain: '#90afa2ff',
+    checkerTextSecondary: '#A0A3A0',
+    checkerTextTertiary: '#a9af90',
+    checkerBorder: '#6a6a6aff',
+    checkerSuccess: '#00E676', // Slightly lighter for visibility on dark
+    checkerError: '#EF5350',
+    checkerHighlight: '#003309',
+    
+// 35fb56ad
+
+
     // Secondary colors
-    check: '#02be21ff',
-    checkLight: 'rgba(53, 251, 86, 0.68)',
-    // checkLighter: '#bbffc6ff',
-    // success: '#34c759',
     secondary: '#5856d6',
     warning: '#ff9500ff',
     danger: '#ff4d4f',

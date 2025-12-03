@@ -1,22 +1,20 @@
-// types/schedule.ts
-export type ScheduleTag = "meeting" | "event" | "holiday";
 
-export type ScheduleColor =
-  | "#202e32"
-  | "#85937a"
-  | "#586c5c"
-  | "#a9af90"
-  | "#dfdcb9";
+export type ScheduleTag = 'meeting' | 'event' | 'holiday';
+
+export type ScheduleLocationType = 'online' | 'offline';
 
 export interface Schedule {
   id: string;
   name: string;
   start: Date;
   end: Date;
-  locationType: "online" | "offline";
-  locationLabel: string;   // e.g. "Google Meet", "Office"
-  locationLink?: string;   // optional URL for online
+  locationType: ScheduleLocationType;
+  locationLabel: string;      // e.g. "Google Meet", "Office"
+  locationUrl?: string;       // only for online
   tag: ScheduleTag;
-  color: ScheduleColor;
+  color: string;
+  notes?: string;
   createdAt: Date;
 }
+export const isSchedulePast = (schedule: Schedule, now: Date = new Date()) =>
+  schedule.end.getTime() < now.getTime();

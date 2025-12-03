@@ -2,62 +2,45 @@
 import { RootState } from "@/src/store";
 import { Feather, Ionicons } from "@expo/vector-icons";
 import { BlurView } from "expo-blur";
+import { Link, useRouter } from 'expo-router';
 import React, { useCallback, useEffect, useState } from "react";
 import {
-  Alert,
   FlatList,
   Pressable,
   SafeAreaView,
   ScrollView,
   StyleSheet,
   Text,
-  TextInput,
-  Touchable,
   TouchableOpacity,
   View
 } from "react-native";
 import { useDispatch, useSelector } from "react-redux";
 import theme, { GlassTheme } from '../constants/theme';
-import { addTodo, removeTodo, setTodos, Todo, toggleTodo } from '../src/store/slices/todoSlice';
-import { deleteTodo, getAllTodos, initDb, insertTodo, updateTodoCompletion } from '../src/utils/sqlite';
-import WorkSpaceScreen from "./screens/WorkSpaceScreen";
-import { Checkbox } from 'expo-checkbox';
-import { Link, useRouter } from 'expo-router';
-import RecordVideoModal from "./components/RecordVideoModal";
+import { removeTodo, setTodos, Todo, toggleTodo } from '../src/store/slices/todoSlice';
+import { deleteTodo, getAllTodos, initDb, updateTodoCompletion } from '../src/utils/sqlite';
 import RecordAudioModal from "./components/RecordAudioModal";
-
-
-function makeId() {
-  return String(Date.now()) + Math.random().toString(36).slice(2, 8);
-}
+import RecordVideoModal from "./components/RecordVideoModal";
 
 
 export default function AppIo() {
-  const [text, setText] = useState('');
   const theme = GlassTheme.dark;
   const dispatch = useDispatch();
   const todos = useSelector((s: RootState) => s.todo.items);
-  const [isChecked, setChecked] = useState(false);
   const [addOpen, setAddOpen] = useState(false);
+  const [profileDropDown, setProfileDropDown] = useState(false)
   const [audioOpen, setAudioOpen] = useState(false);
   const [videoOpen, setVideoOpen] = useState(false);
   const router = useRouter();
-  const r: any = router;
+  // const [now, setNow] = useState<Date>(new Date());
+  const [selectedDate, setSelectedDate] = useState<Date>(new Date());
+  const [refreshing, setRefreshing] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
 
+  useEffect(() => {
+    const id = setInterval(() => (new Date()), 60_000);
+    return () => clearInterval(id);
+  }, []);
   
-  const onAdd = useCallback(async () => {
-    if (!text.trim()) return;
-    const id = makeId();
-    const title = text.trim();
-    try {
-      await insertTodo(id, title, 0);
-      dispatch(addTodo({ id, title }));
-      setText('');
-    } catch (err) {
-      Alert.alert('Error', 'Failed to add todo');
-      console.warn(err);
-    }
-  }, [text, dispatch]);
   
   useEffect(() => {
     (async () => {
@@ -82,38 +65,39 @@ export default function AppIo() {
   ];
  
 
-  const onToggle = useCallback(async (id: string) => {
-    try {
-      const t = todos.find((x) => x.id === id);
-      if (!t) return;
-      const newCompleted = t.completed ? 0 : 1;
-      await updateTodoCompletion(id, newCompleted);
-      dispatch(toggleTodo({ id }));
-    } catch (err) {
-      console.warn(err);
-    }
-  }, [todos, dispatch]);
-  
-  const onDelete = useCallback(async (id: string) => {
-      try {
-        await deleteTodo(id);
-        dispatch(removeTodo({ id }));
-      } catch (err) {
-        console.warn(err);
-      }
-    }, [dispatch]);
 
-  const renderItem = ({ item }: { item: Todo }) => (
-    <BlurView intensity={40} style={styles.glassRow}>
-      <TouchableOpacity onPress={() => onToggle(item.id)} style={[styles.checkbox, { borderColor: theme.borderMedium }]}>
-        <Text style={styles.checkmark}>{item.completed ? '✓' : ''}</Text>
-      </TouchableOpacity>
-      <Text style={[styles.itemText, item.completed && styles.completed]}>{item.title}</Text>
-      <TouchableOpacity onPress={() => onDelete(item.id)} style={styles.del}>
-        <Text style={{ color: theme.danger, fontWeight: '600' }}>Delete</Text>
-      </TouchableOpacity>
-    </BlurView>
-  );
+  // const onToggle = useCallback(async (id: string) => {
+  //   try {
+  //     const t = todos.find((x) => x.id === id);
+  //     if (!t) return;
+  //     const newCompleted = t.completed ? 0 : 1;
+  //     await updateTodoCompletion(id, newCompleted);
+  //     dispatch(toggleTodo({ id }));
+  //   } catch (err) {
+  //     console.warn(err);
+  //   }
+  // }, [todos, dispatch]);
+  
+  // const onDelete = useCallback(async (id: string) => {
+  //     try {
+  //       await deleteTodo(id);
+  //       dispatch(removeTodo({ id }));
+  //     } catch (err) {
+  //       console.warn(err);
+  //     }
+  //   }, [dispatch]);
+
+  // const renderItem = ({ item }: { item: Todo }) => (
+  //   <BlurView intensity={40} style={styles.glassRow}>
+  //     <TouchableOpacity onPress={() => onToggle(item.id)} style={[styles.checkbox, { borderColor: theme.borderMedium }]}>
+  //       <Text style={styles.checkmark}>{item.completed ? '✓' : ''}</Text>
+  //     </TouchableOpacity>
+  //     <Text style={[styles.itemText, item.completed && styles.completed]}>{item.title}</Text>
+  //     <TouchableOpacity onPress={() => onDelete(item.id)} style={styles.del}>
+  //       <Text style={{ color: theme.danger, fontWeight: '600' }}>Delete</Text>
+  //     </TouchableOpacity>
+  //   </BlurView>
+  // );
 
 
   return (
@@ -125,30 +109,96 @@ export default function AppIo() {
       >
         {/* Header */}
 
-        <BlurView intensity={80} style={styles.headerGlass}>
+        <BlurView intensity={0} style={styles.headerGlass}>
+            <TouchableOpacity 
+              onPress={() => setProfileDropDown((s) => !s)} 
+              activeOpacity={0.8}
+            >
+              <Ionicons name="person-circle" size={40} color="#111827" style={{ color: theme.checkerSuccess }} />
+            </TouchableOpacity>
             <View style={styles.header}>
-              <Text style={[styles.title, { color: theme.check }]}>Home</Text>
-              <Text style={[styles.subtitle, { color: theme.textTertiary }]}>Your tasks and quick insights live here.</Text>
+              <Text style={[styles.title, { color: theme.checkerSuccess }]}>Home</Text>
+              {/* <Text style={[styles.subtitle, { color: theme.textTertiary }]}>Your tasks and quick insights live here.</Text> */}
             </View>
-            <Ionicons name="person-circle" size={40} color="#111827" style={{ color: theme.check }} />
+            <TouchableOpacity
+              style={styles.sortButton}
+            
+            >
+              <Ionicons name='ellipsis-horizontal' size={20}  style={{ color: theme.checkerTextSecondary }} />          
+            </TouchableOpacity>
         </BlurView>
 
 
-        {/* // Inside your component: */}
-    
+
+        {profileDropDown && (
+        <BlurView intensity={50}  tint='dark' style={[styles.ProfileDropDownWrap]}>
+          {/* <View style={[styles.ProfileDropDownWrap]}> */}
+
+            <TouchableOpacity onPress={() => (router.push("/screens/ImportScreen"), setProfileDropDown(false))} style={styles.profileDropDownItem}>
+              <Text style={{ color: theme.checkerTextMain }}>Logout</Text>
+              <Ionicons name='log-out' size={25} color={ theme.checkerTextMain }/>
+            </TouchableOpacity>
+
+            <TouchableOpacity onPress={() => (router.push("/screens/ImportScreen"), setProfileDropDown(false))} style={styles.profileDropDownItem}>
+              <Text style={{ color: theme.checkerTextMain }}>SignIn</Text>
+              <Ionicons name='log-in' size={25} color={ theme.checkerTextMain }/>
+            </TouchableOpacity>
+
+            <TouchableOpacity onPress={() => (router.push("/screens/ImportScreen"), setProfileDropDown(false))} style={[styles.profileDropDownItem, {borderBottomWidth: 0}]}>
+              <Text style={{ color: theme.checkerTextMain }}>Logout</Text>
+              <Ionicons name='log-out' size={25} color={ theme.checkerTextMain }/>
+            </TouchableOpacity>
+          {/* </View> */}
+        </BlurView>
+        )}
+
+
+
+
+
+
+
+
+
+
+
         {/* <View style={styles.section}>
           <Checkbox style={styles.checkbox} value={isChecked} onValueChange={setChecked} />
           <Text style={styles.paragraph}>Normal checkbox</Text>
         </View> */}
 
+        
+
         {/* To-do card */}
-        <View style={styles.todoCard}>
+        <TouchableOpacity
+            activeOpacity={0.8}
+            style={styles.todoCard}
+            onPress={() => router.push("/screens/schedules/ScheduleLayout")}
+            >
+
+
           <View style={styles.todoHeaderRow}>
             <View>
-              <Text style={styles.todoTitle}>To-Do List</Text>
-              <Text style={styles.todoSubtitle}>
-                Today is Friday, February 1
-              </Text>
+                <Link href="/screens/schedules/ScheduleLayout">
+                  <Link.Trigger>
+                    <Text style={styles.todoTitle}>Make a Schedule</Text>
+                  </Link.Trigger>
+                  <Link.Preview style={{ width: 400, height: 400 }} />
+                </Link>
+                <View style={styles.monthRow}>
+                  <Text style={styles.todoSubtitle}>
+                    Today is
+                  </Text>
+                  <Text style={styles.monthText}>
+                    {selectedDate.toLocaleString(undefined, {
+                      day: 'numeric',
+                      month: 'long',
+                      year: 'numeric',
+                      weekday: 'long',
+                    })}
+                    
+                  </Text>
+                </View>
             </View>
           </View>
 
@@ -163,7 +213,7 @@ export default function AppIo() {
                   ]}
                 >
                   {item.completed && (
-                    <Feather name="check" size={16} color="#ffffff" />
+                    <Feather name="check" size={16} color="#ffffff" style={{ borderWidth: 1, borderColor: 'red' }} />
                   )}
                 </View>
                 <Text
@@ -178,158 +228,95 @@ export default function AppIo() {
             ))}
           </View>
           <Pressable >
-              <Checkbox style={styles.checkbox} value={isChecked} onValueChange={setChecked} />
+              {/* Add new todo checkbox */}
           </Pressable>
-        </View>
+        </TouchableOpacity>
 
 
-        <View style={styles.headerRow}>
-          <Text style={[styles.logo, {color: theme.checkLight}]}>Note</Text>
-          <Ionicons name="search-outline" size={24} color={theme.checkLight} />
-        </View>
 
-        {/* <BlurView intensity={40} style={styles.inputGlass}>
-          <View style={styles.inputRow}>
-            <TextInput 
-              placeholder="New todo" 
-              value={text} 
-              onChangeText={setText} 
-              style={[styles.input, { borderColor: theme.borderLight, color: theme.text }]}
-              placeholderTextColor={theme.textTertiary}
-            />
-            <TouchableOpacity onPress={onAdd} style={[styles.addBtn, { backgroundColor: theme.text }]}>
-              <Text style={{ color: theme.textTertiary, fontWeight: '600' }}>Add</Text>
-            </TouchableOpacity>
-          </View>
-        </BlurView> */}
+        <TouchableOpacity style={styles.headerRow}>
+          <Text style={[styles.logo, {color: theme.checkerSuccess}]}>Note</Text>
+          <Ionicons name="search-outline" size={24} color={theme.checkerTextSecondary} />
+        </TouchableOpacity>
 
-          <View style={styles.tabsRows}>
+      
+        {/* Tabs */}
+        <View style={styles.tabsRows}>
 
-            <BlurView intensity={50} tint="dark" style={[styles.bottomButton]}>
-                <TouchableOpacity>
-                  <Feather name="sliders" size={22} color={theme.textSecondary} />
-                </TouchableOpacity>
-            </BlurView>
+          <BlurView intensity={50} tint="dark" style={[styles.bottomButton]}>
+              <TouchableOpacity>
+                <Feather name="sliders" size={22} color={theme.textSecondary} />
+              </TouchableOpacity>
+          </BlurView>
 
 
-            <FlatList 
-                data={tabs} 
-                horizontal={true}
-                keyExtractor={(i) => i.id.toString()} 
-                renderItem={({ item }) => (
-                  
-                  // <BlurView intensity={50} tint="dark" style={[styles.bottomButton]}>
-                  <TouchableOpacity
+          <FlatList 
+              data={tabs} 
+              horizontal={true}
+              
+              keyExtractor={(i) => i.id.toString()} 
+              renderItem={({ item }) => (
+                
+                // <BlurView intensity={50} tint="dark" style={[styles.bottomButton]}>
+                <TouchableOpacity
+                  style={[
+                    styles.tabChip,
+                    item.active && styles.tabChipActive,
+                  ]}
+                >
+                  <Text
                     style={[
-                      styles.tabChip,
-                      item.active && styles.tabChipActive,
+                      styles.tabText,
+                      item.active && styles.tabTextActive,
+                    ]}
+                  >
+                    {item.label}
+                  </Text>
+                  <View
+                    style={[
+                      styles.tabBadge,
+                      item.active && styles.tabBadgeActive,
                     ]}
                   >
                     <Text
                       style={[
-                        styles.tabText,
-                        item.active && styles.tabTextActive,
+                        styles.tabBadgeText,
+                        item.active && styles.tabBadgeTextActive,
                       ]}
                     >
-                      {item.label}
+                      {item.count}
                     </Text>
-                    <View
-                      style={[
-                        styles.tabBadge,
-                        item.active && styles.tabBadgeActive,
-                      ]}
-                    >
-                      <Text
-                        style={[
-                          styles.tabBadgeText,
-                          item.active && styles.tabBadgeTextActive,
-                        ]}
-                      >
-                        {item.count}
-                      </Text>
-                    </View>
-                  </TouchableOpacity>
-                  // </BlurView>
+                  </View>
+                </TouchableOpacity>
+                // </BlurView>
 
-                )}
-            />
-          </View>
-        {/* Tabs */}
-        {/* <View style={styles.tabsRow}>
-          {tabs.map((t) => (
-            <TouchableOpacity
-              key={t.label}
-              style={[
-                styles.tabChip,
-                t.active && styles.tabChipActive,
-              ]}
-            >
-              <Text
-                style={[
-                  styles.tabText,
-                  t.active && styles.tabTextActive,
-                ]}
-              >
-                {t.label}
-              </Text>
-              <View
-                style={[
-                  styles.tabBadge,
-                  t.active && styles.tabBadgeActive,
-                ]}
-              >
-                <Text
-                  style={[
-                    styles.tabBadgeText,
-                    t.active && styles.tabBadgeTextActive,
-                  ]}
-                >
-                  {t.count}
-                </Text>
-              </View>
-            </TouchableOpacity>
-          ))}
-        </View> */}
-
-
-
+              )}
+          />
+        </View>
+        
                   
 
         {/* Notes grid */}
         <View style={styles.notesRow}>
           {/* Right locked note */}
-            <View style={[styles.noteCard,styles.lockedCard, ]}>
+            <View style={[ styles.noteCard,styles.lockedCard ]}>
               <Link href="/screens/WorkSpaceScreen" >
-                {/* <Link.Trigger>klklklklklk</Link.Trigger> */}
+                <Link.Trigger >
+                  <Feather name="lock" size={32} color="#9CA3AF" />
                 
-                  {/* <Link.Trigger style={styles.lockedNoteContent}>
-                    <Feather name="lock" size={32} color="#9CA3AF" />
-                  
-                    <Text style={styles.lockedText}>Locked Note</Text>
-                  </Link.Trigger> */}
-                {/* <Link.Preview style={{ width: 500, height: 500, }}/> */}
-
-
-              <Link.Trigger>About</Link.Trigger>
-              <Link.Trigger>Content</Link.Trigger>
-              <Link.Preview/>
+                  {/* <Text style={styles.lockedText}>Locked Note</Text> */}
+                </Link.Trigger>
+                <Link.Preview style={{ width: 500, height: 500, }}/>
               </Link>
             </View>
 
 
 
 
-            <Link href="/screens/SignUpScreen">
+            {/* <Link href="/screens/schedules/ScheduleLayout">
               <Link.Trigger>About</Link.Trigger>
-              <Link.Trigger>Content</Link.Trigger>
-              <Link.Preview >
-                {/* <Image
-                  onLoad={e => setImageSize(e.nativeEvent.source)}
-                  source={source}
-                  style={{ width: '100%', height: '100%' }}
-                /> */}
-              </Link.Preview>
-            </Link>
+              <Link.Preview />
+            </Link> */}
 
 
 
@@ -465,13 +452,13 @@ export default function AppIo() {
 
 
 
-        <FlatList
+        {/* <FlatList
           data={todos}
           keyExtractor={(i) => i.id}
           renderItem={renderItem}
           contentContainerStyle={{ paddingBottom: 40 }}
           scrollEnabled={true}
-        />
+        /> */}
 
         {/* <WorkSpaceScreen /> */}
 
@@ -492,7 +479,6 @@ export default function AppIo() {
                 <TouchableOpacity
                   onPress={() => setAddOpen((s) => !s)} 
                   activeOpacity={0.8}
-                  // style={}
                   >
                   <Feather name="plus" size={26} color={theme.textSecondary} />
                 </TouchableOpacity>
@@ -534,7 +520,9 @@ export default function AppIo() {
 
         <RecordAudioModal visible={audioOpen} onClose={() => setAudioOpen(false)} />
         <RecordVideoModal visible={videoOpen} onClose={() => setVideoOpen(false)} />
-
+        
+        refreshing={refreshing}
+        onRefresh={handleRefresh}
 
     </SafeAreaView>
   );
@@ -586,7 +574,6 @@ const styles = StyleSheet.create({
     fontSize: 15,
   },
 
-
   headerGlass: { 
     flexDirection: 'row', 
     alignItems: 'center',
@@ -597,6 +584,7 @@ const styles = StyleSheet.create({
     // borderWidth: 1,
     // borderColor: 'rgba(255, 255, 255, 0.3)',
     ...GlassTheme.shadow.light,
+    paddingHorizontal: 4
     
   },
   header: { 
@@ -613,15 +601,11 @@ const styles = StyleSheet.create({
     letterSpacing: 0.5,
   },
 
-
-
-  addBtn: { 
-    paddingVertical: 12, 
-    paddingHorizontal: 18, 
-    borderRadius: 10,
-    ...GlassTheme.shadow.subtle,
+  sortButton: {
+    backgroundColor: theme.dark.glassOverlay,
+    borderRadius: theme.radius.small,
+    padding: 9,
   },
-
   checkmark: {
     fontSize: 16,
     fontWeight: '700',
@@ -667,7 +651,7 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     alignItems: "center",
     justifyContent: 'center',
-    paddingHorizontal: 6,
+    paddingHorizontal: 0,
     paddingLeft: 25,
     paddingVertical: 10,
     borderRadius: 999,
@@ -675,7 +659,7 @@ const styles = StyleSheet.create({
     marginRight: 9,
   },
   tabChipActive: {
-    backgroundColor: theme.dark.checkLight,
+    backgroundColor: theme.dark.checkerSuccess,
   },
   tabText: {
     fontSize: 14,
@@ -690,8 +674,9 @@ const styles = StyleSheet.create({
   },
   tabBadge: {
     position: 'relative',
-    bottom: 17,
-    left: 12,
+    zIndex:90,
+    bottom: 14,
+    left: 7,
     minWidth: 24,
     paddingHorizontal: 6,
     paddingVertical: 6,
@@ -711,6 +696,54 @@ const styles = StyleSheet.create({
     color: "#111827",
   },
 
+  ProfileDropDownWrap:{
+    position: 'absolute',
+    alignSelf: 'flex-end',
+    top: 80,
+    left: 11,
+    zIndex: 90,
+    overflow: 'hidden',
+    // backgroundColor: theme.dark.checkerSuccess,
+    // backgroundColor: '#00f27d18',
+    backgroundColor: '#35363581',
+    borderRadius: theme.radius.medium,
+    borderWidth: 1,
+    borderColor: theme.dark.borderLight,
+    gap: 12,
+    paddingHorizontal: 9,
+    paddingVertical: 12,
+    // shadowOffset: {width: 4, height: 4},
+    // shadowColor: '#00000068',
+    // shadowOpacity: 10,
+    elevation: 28,
+
+  },
+//   dropdownGlass1: {
+//     position: 'absolute', 
+//     top: 80,
+//     left: 11,
+//     borderRadius: 12,
+//     overflow: 'hidden',
+//     borderWidth: 1,
+//     paddingHorizontal: 30,
+//     borderColor: theme.dark.borderLight,
+//     shadowColor: '#000',
+//     shadowOffset: { width: 0, height: 8 },
+//     shadowOpacity: 0.2,
+//     shadowRadius: 12,
+//     elevation: 28,
+// },
+  profileDropDownItem:{
+    justifyContent: 'space-between',
+    alignItems: 'center',
+    flex: 1,
+    flexDirection: 'row',
+    width: 180,
+    paddingVertical: 10,
+    paddingHorizontal: 19,
+    // borderBottomWidth: 1,
+    // borderBottomColor: '#4c4c4c30'
+  },
   todoCard: {
     flexDirection: "row",
     justifyContent: "space-between",
@@ -739,14 +772,20 @@ const styles = StyleSheet.create({
     color: theme.dark.textSecondary,
     marginTop: 4,
   },
-  // expandBtn: {
-  //   width: 34,
-  //   height: 34,
-  //   borderRadius: 17,
-  //   // backgroundColor: "#111827",
-  //   alignItems: "center",
-  //   justifyContent: "center",
-  // },
+  monthRow: {
+    flexDirection: 'row',
+    alignItems: 'flex-end',
+    justifyContent: 'center',
+    gap: 6,
+  },
+  monthText: {
+    color: theme.dark.checkerTextTertiary,
+    fontSize: 12,
+    fontWeight: '400',
+    // marginHorizontal: 10,
+    letterSpacing: 1.2,
+    textTransform: 'capitalize'
+  },
   todoList: {
     marginTop: 4,
   },
@@ -801,6 +840,7 @@ const styles = StyleSheet.create({
     maxWidth: 178,
     minHeight: 'auto',
     // height: 200,
+
     maxHeight: 350,
     overflow: 'hidden',
     backgroundColor: theme.dark.glassDark,
@@ -818,7 +858,7 @@ const styles = StyleSheet.create({
     fontSize: 19,
     fontWeight: "600",
     textAlign: 'justify',
-    color: theme.dark.checkLight,
+    color: theme.dark.checkerSuccess,
     marginBottom: 6,
   },
   noteBody: {
@@ -831,18 +871,20 @@ const styles = StyleSheet.create({
     height: 240,
     borderRadius: 20,
     backgroundColor: theme.dark.glassDark,
-    borderWidth: 2,
-    borderColor: 'blue',
-  },
-  lockedNoteContent:{
-    flex: 1,
-    width: 270,
-    height: 240,
-    flexDirection: 'column',
     alignItems: 'center',
     justifyContent: 'center',
-    gap: 7,
+    flexDirection: 'column'
+  
   },
+  // lockedNoteContent:{
+  //   flex: 1,
+  //   width: 270,
+  //   height: 240,
+  //   flexDirection: 'column',
+  //   alignItems: 'center',
+  //   justifyContent: 'center',
+  //   gap: 7,
+  // },
   lockedText: {
     fontSize: 13,
     color: "#9CA3AF",

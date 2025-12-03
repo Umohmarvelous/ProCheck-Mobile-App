@@ -123,13 +123,13 @@ const styles = StyleSheet.create({
     color: theme.dark.textSecondary
   },
   audioInputLabel:{
-    color: theme.dark.check,
+    color: theme.dark.checkerPrimary,
     paddingVertical: 5
 
   },
   input: { 
     borderWidth: 1, 
-    borderColor: theme.dark.checkLight, 
+    borderColor: theme.dark.checkerSuccess, 
     padding: 20, 
     borderRadius: theme.radius.large, 
     marginBottom: 12,
